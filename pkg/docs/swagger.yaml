@@ -1,0 +1,320 @@
+definitions:
+  auth.LoginRequest:
+    properties:
+      Username:
+        type: string
+      password:
+        type: string
+    required:
+    - Username
+    - password
+    type: object
+  auth.LoginResponse:
+    properties:
+      Email:
+        type: string
+      RefreshToken:
+        type: string
+      RefreshToken_expire_at:
+        type: string
+      Username:
+        type: string
+      accessToken:
+        type: string
+      accessToken_expire_at:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      municipio:
+        type: string
+      provincia:
+        type: string
+      session_id:
+        type: string
+    type: object
+  auth.RefreshAccessTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  auth.RefreshAccessTokenResponse:
+    properties:
+      accessToken:
+        type: string
+      accessToken_expire_at:
+        type: string
+    type: object
+  auth.RegisterRequest:
+    properties:
+      email:
+        type: string
+      municipio:
+        type: integer
+      password:
+        type: string
+      password2:
+        type: string
+      provincia:
+        type: integer
+      username:
+        type: string
+    required:
+    - email
+    - municipio
+    - password
+    - password2
+    - provincia
+    - username
+    type: object
+  auth.RegisterResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      municip:
+        type: string
+      provincia:
+        type: string
+      username:
+        type: string
+    type: object
+  users.DeleteUserRequest:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  users.GetUserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      municipio:
+        type: string
+      provincia:
+        type: string
+      username:
+        type: string
+    type: object
+  users.ListUserRequest:
+    properties:
+      page_id:
+        minimum: 1
+        type: integer
+      page_size:
+        maximum: 10
+        minimum: 5
+        type: integer
+    required:
+    - page_id
+    - page_size
+    type: object
+  users.UpdatePasswordRequest:
+    properties:
+      id:
+        type: integer
+      password:
+        minLength: 8
+        type: string
+      password2:
+        minLength: 8
+        type: string
+    required:
+    - id
+    - password
+    - password2
+    type: object
+  users.UpgradeToSuperUser:
+    properties:
+      id:
+        type: integer
+      valid:
+        type: boolean
+    required:
+    - id
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for a login API.
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: this is a example to login in the site
+      parameters:
+      - description: Login request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+      summary: login example
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: this is the documentation abaut register a new user
+      parameters:
+      - description: register request
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+      summary: register example
+      tags:
+      - auth
+  /token:
+    post:
+      consumes:
+      - application/json
+      description: this is the documentation abaut token to refresh the token
+      parameters:
+      - description: refreshAccessTokenRequest
+        in: body
+        name: refresh
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RefreshAccessTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RefreshAccessTokenResponse'
+      summary: token auth
+      tags:
+      - auth
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: elimina un usuario segun su id
+      parameters:
+      - description: delete user request
+        in: body
+        name: Password
+        required: true
+        schema:
+          $ref: '#/definitions/users.DeleteUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: delete a user by id
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: obtener un usuario por su id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.GetUserResponse'
+      summary: get user by id
+      tags:
+      - users
+  /user/password:
+    put:
+      consumes:
+      - application/json
+      description: actualiza la contraseña de algun usuario
+      parameters:
+      - description: update password request
+        in: body
+        name: Password
+        required: true
+        schema:
+          $ref: '#/definitions/users.UpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: update a password
+      tags:
+      - users
+  /user/upgrade:
+    put:
+      consumes:
+      - application/json
+      description: hace que un usuario se vuelva un super usuario
+      parameters:
+      - description: update password request
+        in: body
+        name: Password
+        required: true
+        schema:
+          $ref: '#/definitions/users.UpgradeToSuperUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: upgrade to a super user
+      tags:
+      - users
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: obtienes varios usuarios en un rango dado por el pageID and pageSize
+      parameters:
+      - description: list user  request
+        in: body
+        name: listUser
+        required: true
+        schema:
+          $ref: '#/definitions/users.ListUserRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: get many users
+      tags:
+      - users
+swagger: "2.0"
