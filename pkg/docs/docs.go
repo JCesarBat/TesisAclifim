@@ -404,6 +404,17 @@ const docTemplate = `{
                 }
             }
         },
+        "database.Provincium": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "users.DeleteUserRequest": {
             "type": "object",
             "required": [

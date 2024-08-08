@@ -83,6 +83,13 @@ definitions:
       username:
         type: string
     type: object
+  database.Provincium:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   users.DeleteUserRequest:
     properties:
       id:

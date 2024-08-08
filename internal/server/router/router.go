@@ -26,7 +26,6 @@ func InitRouter(authServer *auth.Server, userServer *users.Server) {
 	authRouts.PUT("/user/upgrade", userServer.UpgradeToSuperUser)
 	authRouts.DELETE("/user/:id", userServer.DeleteUser)
 
-	r.Run(":8080")
 }
 
 func Run(addr string) error {

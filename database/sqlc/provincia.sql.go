@@ -9,12 +9,34 @@ import (
 	"context"
 )
 
+const getAllProv = `-- name: GetAllProv :one
+SELECT id, name FROM "provincia"
+`
+
+func (q *Queries) GetAllProv(ctx context.Context) (Provincium, error) {
+	row := q.db.QueryRowContext(ctx, getAllProv)
+	var i Provincium
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
+}
+
 const getProvincia = `-- name: GetProvincia :one
 SELECT id, name FROM "provincia" WHERE id =$1
 `
 
 func (q *Queries) GetProvincia(ctx context.Context, id int64) (Provincium, error) {
 	row := q.db.QueryRowContext(ctx, getProvincia, id)
+	var i Provincium
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
+}
+
+const inertarProv = `-- name: InertarProv :one
+Insert INTO "provincia" ("name") VALUES ($1) RETURNING id, name
+`
+
+func (q *Queries) InertarProv(ctx context.Context, name string) (Provincium, error) {
+	row := q.db.QueryRowContext(ctx, inertarProv, name)
 	var i Provincium
 	err := row.Scan(&i.ID, &i.Name)
 	return i, err
