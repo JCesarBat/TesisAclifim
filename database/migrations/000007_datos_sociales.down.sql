@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS "datos_sociales" CASCADE;

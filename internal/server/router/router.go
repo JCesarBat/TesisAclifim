@@ -1,6 +1,8 @@
 package router
 
 import (
+	"Tesis/internal/server/Municipio"
+	"Tesis/internal/server/Prov"
 	"Tesis/internal/server/auth"
 	"Tesis/internal/server/users"
 	"github.com/gin-gonic/gin"
@@ -10,8 +12,17 @@ import (
 
 var r *gin.Engine
 
-func InitRouter(authServer *auth.Server, userServer *users.Server) {
+func InitRouter(authServer *auth.Server, userServer *users.Server,
+	provServer *Prov.Server, munServrer *Municipio.Server) {
 	r = gin.Default()
+
+	// Provincias y Municipios
+	r.GET("/provincia", provServer.GetProv)
+	r.GET("/provincias", provServer.GetAllProv)
+
+	r.GET("/municipio", munServrer.GetMun)
+	r.GET("/municipios", munServrer.GetAllMun)
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	// these are the routes of auth server
 	r.POST("/login", authServer.Login)

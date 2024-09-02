@@ -13,6 +13,7 @@ import (
 type Querier interface {
 	CreateUSessions(ctx context.Context, arg CreateUSessionsParams) (Session, error)
 	DeleteUser(ctx context.Context, id int64) error
+	GetAllMunicipio(ctx context.Context, idProvincia int64) ([]Municipio, error)
 	GetAllProv(ctx context.Context) (Provincium, error)
 	GetMunicipio(ctx context.Context, id int64) (Municipio, error)
 	GetProvincia(ctx context.Context, id int64) (Provincium, error)
@@ -20,6 +21,7 @@ type Querier interface {
 	GetUser(ctx context.Context, username string) (User, error)
 	GetUserID(ctx context.Context, id int64) (User, error)
 	InertarProv(ctx context.Context, name string) (Provincium, error)
+	InsertMunicipio(ctx context.Context, arg InsertMunicipioParams) (Municipio, error)
 	InsertUser(ctx context.Context, arg InsertUserParams) (User, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
 	UpdateToSuperUser(ctx context.Context, arg UpdateToSuperUserParams) (User, error)

@@ -9,12 +9,55 @@ import (
 	"context"
 )
 
+const getAllMunicipio = `-- name: GetAllMunicipio :many
+SELECT id, id_provincia, name FROM "municipio" WHERE id_provincia =$1
+`
+
+func (q *Queries) GetAllMunicipio(ctx context.Context, idProvincia int64) ([]Municipio, error) {
+	rows, err := q.db.QueryContext(ctx, getAllMunicipio, idProvincia)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Municipio{}
+	for rows.Next() {
+		var i Municipio
+		if err := rows.Scan(&i.ID, &i.IDProvincia, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getMunicipio = `-- name: GetMunicipio :one
 SELECT id, id_provincia, name FROM "municipio" WHERE id =$1
 `
 
 func (q *Queries) GetMunicipio(ctx context.Context, id int64) (Municipio, error) {
 	row := q.db.QueryRowContext(ctx, getMunicipio, id)
+	var i Municipio
+	err := row.Scan(&i.ID, &i.IDProvincia, &i.Name)
+	return i, err
+}
+
+const insertMunicipio = `-- name: InsertMunicipio :one
+INSERT INTO "municipio"("name","id_provincia")values ($1,$2) RETURNING id, id_provincia, name
+`
+
+type InsertMunicipioParams struct {
+	Name        string `json:"name"`
+	IDProvincia int64  `json:"id_provincia"`
+}
+
+func (q *Queries) InsertMunicipio(ctx context.Context, arg InsertMunicipioParams) (Municipio, error) {
+	row := q.db.QueryRowContext(ctx, insertMunicipio, arg.Name, arg.IDProvincia)
 	var i Municipio
 	err := row.Scan(&i.ID, &i.IDProvincia, &i.Name)
 	return i, err

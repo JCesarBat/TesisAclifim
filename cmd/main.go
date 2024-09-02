@@ -2,6 +2,8 @@ package main
 
 import (
 	database "Tesis/database/sqlc"
+	"Tesis/internal/server/Municipio"
+	"Tesis/internal/server/Prov"
 	"Tesis/internal/server/auth"
 	"Tesis/internal/server/router"
 	"Tesis/internal/server/users"
@@ -35,7 +37,15 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to start the users server")
 	}
-	router.InitRouter(authServer, userServer)
+	provServer, err := Prov.NewServer(store, config)
+	if err != nil {
+		log.Fatal("Failed to start the prov server")
+	}
+	munServer, err := Municipio.NewServer(store, config)
+	if err != nil {
+		log.Fatal("Failed to start the mun server")
+	}
+	router.InitRouter(authServer, userServer, provServer, munServer)
 	log.Println("the server is running in the port:", config.HTTP_Server)
 	router.Run(config.HTTP_Server)
 }
