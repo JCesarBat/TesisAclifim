@@ -12,18 +12,23 @@ import (
 
 type Querier interface {
 	CreateUSessions(ctx context.Context, arg CreateUSessionsParams) (Session, error)
+	DeleteAsociado(ctx context.Context, id int64) error
 	DeleteUser(ctx context.Context, id int64) error
 	GetAllMunicipio(ctx context.Context, idProvincia int64) ([]Municipio, error)
 	GetAllProv(ctx context.Context) (Provincium, error)
+	GetAsociado(ctx context.Context, id int64) (Asociado, error)
 	GetMunicipio(ctx context.Context, id int64) (Municipio, error)
 	GetProvincia(ctx context.Context, id int64) (Provincium, error)
 	GetSessions(ctx context.Context, id uuid.UUID) (Session, error)
 	GetUser(ctx context.Context, username string) (User, error)
 	GetUserID(ctx context.Context, id int64) (User, error)
 	InertarProv(ctx context.Context, name string) (Provincium, error)
+	InsertAsoiciado(ctx context.Context, arg InsertAsoiciadoParams) (Asociado, error)
 	InsertMunicipio(ctx context.Context, arg InsertMunicipioParams) (Municipio, error)
 	InsertUser(ctx context.Context, arg InsertUserParams) (User, error)
+	ListAsociado(ctx context.Context, arg ListAsociadoParams) ([]Asociado, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateAsociado(ctx context.Context, arg UpdateAsociadoParams) (Asociado, error)
 	UpdateToSuperUser(ctx context.Context, arg UpdateToSuperUserParams) (User, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
