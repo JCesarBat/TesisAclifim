@@ -2,12 +2,8 @@ package main
 
 import (
 	database "Tesis/database/sqlc"
-	"Tesis/internal/server/Municipio"
-	"Tesis/internal/server/Prov"
-	"Tesis/internal/server/asociado"
-	"Tesis/internal/server/auth"
+	"Tesis/internal/server/orchestrator"
 	"Tesis/internal/server/router"
-	"Tesis/internal/server/users"
 	_ "Tesis/pkg/docs"
 	"Tesis/pkg/util"
 	"database/sql"
@@ -30,27 +26,11 @@ func main() {
 		log.Fatal("Failed to load the database")
 	}
 	store := database.NewStore(db)
-	authServer, err := auth.NewServer(store, config)
+	orchestatrator, err := orchestrator.NewOrchestrator(store, config)
 	if err != nil {
-		log.Fatal("Failed to start the auth server")
+		log.Fatal("faild to load all servers", err.Error())
 	}
-	userServer, err := users.NewServer(store, config)
-	if err != nil {
-		log.Fatal("Failed to start the users server")
-	}
-	provServer, err := Prov.NewServer(store, config)
-	if err != nil {
-		log.Fatal("Failed to start the prov server")
-	}
-	munServer, err := Municipio.NewServer(store, config)
-	if err != nil {
-		log.Fatal("Failed to start the mun server")
-	}
-	asServer, err := asociado.NewServer(store, config)
-	if err != nil {
-		log.Fatal("Failed to start the asociado server")
-	}
-	router.InitRouter(authServer, userServer, provServer, munServer, asServer)
+	router.InitRouter(orchestatrator)
 	log.Println("the server is running in the port:", config.HTTP_Server)
 	router.Run(config.HTTP_Server)
 }
