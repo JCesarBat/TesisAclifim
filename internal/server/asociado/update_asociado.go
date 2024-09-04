@@ -2,6 +2,7 @@ package asociado
 
 import (
 	database "Tesis/database/sqlc"
+	"Tesis/internal/server/common_data"
 	"database/sql"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,7 +25,7 @@ type UpdateAsociadoRequest struct {
 func (server *Server) UpdateAsociado(c *gin.Context) {
 	var req UpdateAsociadoRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
 	params := database.UpdateAsociadoParams{
@@ -40,9 +41,9 @@ func (server *Server) UpdateAsociado(c *gin.Context) {
 		Direccion:           req.Direccion,
 		IDMunicipio:         req.IDMunicipio,
 	}
-	_, err := server.store.UpdateAsociado(c, params)
+	_, err := server.GetStore().UpdateAsociado(c, params)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Asociado updated successfully"})

@@ -34,25 +34,25 @@ type GetUserResponse struct {
 func (server *Server) GetUser(c *gin.Context) {
 	var req GetUserRequest
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
-	user, err := server.store.GetUserID(c, req.ID)
+	user, err := server.GetStore().GetUserID(c, req.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
-	mun, prov, err := common_data.GetMunAndProv(user.IDMunicipio, server.store, c)
+	mun, prov, err := common_data.GetMunAndProv(user.IDMunicipio, server.GetStore(), c)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "not found the prov or the mun"})
 			return
 		}
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 	}
 
 	response := GetUserResponse{

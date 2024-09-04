@@ -2,6 +2,7 @@ package users
 
 import (
 	database "Tesis/database/sqlc"
+	"Tesis/internal/server/common_data"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,7 @@ type ListUserResponse struct {
 func (s *Server) ListUser(ctx *gin.Context) {
 	var req ListUserRequest
 	if err := ctx.ShouldBindQuery(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
 
@@ -38,13 +39,13 @@ func (s *Server) ListUser(ctx *gin.Context) {
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
-	users, err := s.store.ListUsers(ctx, arg)
+	users, err := s.GetStore().ListUsers(ctx, arg)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 

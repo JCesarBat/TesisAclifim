@@ -1,6 +1,7 @@
 package Municipio
 
 import (
+	"Tesis/internal/server/common_data"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -25,16 +26,16 @@ type GetMunRequest struct {
 func (s *Server) GetMun(c *gin.Context) {
 	var req GetMunRequest
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
-	mun, err := s.store.GetMunicipio(c, req.ID)
+	mun, err := s.GetStore().GetMunicipio(c, req.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(500, errorResponse(err))
+		c.JSON(500, common_data.ErrorResponse(err))
 		return
 	}
 	c.JSON(200, mun)

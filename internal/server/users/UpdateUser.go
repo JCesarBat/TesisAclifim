@@ -2,6 +2,7 @@ package users
 
 import (
 	database "Tesis/database/sqlc"
+	"Tesis/internal/server/common_data"
 	"Tesis/pkg/util"
 	"database/sql"
 	"errors"
@@ -29,7 +30,7 @@ type UpdatePasswordRequest struct {
 func (s *Server) UpdatePassword(c *gin.Context) {
 	var req UpdatePasswordRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
 	if req.Password != req.Password2 {
@@ -38,20 +39,20 @@ func (s *Server) UpdatePassword(c *gin.Context) {
 	}
 	HashPasswird, err := util.HashPassword(req.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 	param := database.UpdateUserParams{
 		ID:       req.Id,
 		Password: sql.NullString{String: HashPasswird, Valid: true},
 	}
-	_, err = s.store.UpdateUser(c, param)
+	_, err = s.GetStore().UpdateUser(c, param)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 
@@ -77,16 +78,16 @@ type UpgradeToSuperUser struct {
 func (s *Server) UpgradeToSuperUser(c *gin.Context) {
 	var req UpgradeToSuperUser
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
-	user, err := s.store.GetUserID(c, int64(req.Id))
+	user, err := s.GetStore().GetUserID(c, int64(req.Id))
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 	if user.SuperUser.Bool == req.Valid {
@@ -97,13 +98,13 @@ func (s *Server) UpgradeToSuperUser(c *gin.Context) {
 		ID:        user.ID,
 		SuperUser: sql.NullBool{Bool: req.Valid, Valid: true},
 	}
-	_, err = s.store.UpdateToSuperUser(c, param)
+	_, err = s.GetStore().UpdateToSuperUser(c, param)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(http.StatusInternalServerError, errorResponse(err))
+		c.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 	}
 

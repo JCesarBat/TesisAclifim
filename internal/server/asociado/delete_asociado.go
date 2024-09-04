@@ -17,7 +17,7 @@ func (server *Server) DeleteAsociado(c *gin.Context) {
 	}
 
 	// Delete the asociado from the database
-	if err := server.store.DeleteAsociado(c, request.ID); err != nil {
+	if err := server.GetStore().DeleteAsociado(c, request.ID); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

@@ -1,6 +1,7 @@
 package Prov
 
 import (
+	"Tesis/internal/server/common_data"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -25,16 +26,16 @@ type GetProvRequest struct {
 func (s *Server) GetProv(c *gin.Context) {
 	var req GetProvRequest
 	if err := c.ShouldBindUri(&req); err != nil {
-		c.JSON(http.StatusBadRequest, errorResponse(err))
+		c.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
-	prov, err := s.store.GetProvincia(c, req.ID)
+	prov, err := s.GetStore().GetProvincia(c, req.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, errorResponse(err))
+			c.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		c.JSON(500, errorResponse(err))
+		c.JSON(500, common_data.ErrorResponse(err))
 		return
 	}
 	c.JSON(200, prov)

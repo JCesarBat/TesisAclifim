@@ -18,11 +18,11 @@ func (server *Server) GetAsociado(c *gin.Context) {
 		return
 	}
 
-	asociado, err := server.store.GetAsociado(c, req.ID)
+	asociado, err := server.GetStore().GetAsociado(c, req.ID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Asociado not found"})
-			
+
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}

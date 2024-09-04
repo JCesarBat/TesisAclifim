@@ -37,7 +37,7 @@ func (server *Server) CreateAsociado(c *gin.Context) {
 		Direccion:           asociado.Direccion,
 		IDMunicipio:         asociado.IDMunicipio,
 	}
-	result, err := server.store.InsertAsoiciado(c, param)
+	result, err := server.GetStore().InsertAsoiciado(c, param)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return

@@ -21,7 +21,7 @@ func (server *Server) ListAsociados(c *gin.Context) {
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
-	asociados, err := server.store.ListAsociado(c, param)
+	asociados, err := server.GetStore().ListAsociado(c, param)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
