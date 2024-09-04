@@ -3,6 +3,7 @@ package common_data
 import (
 	database "Tesis/database/sqlc"
 	"context"
+	"github.com/gin-gonic/gin"
 )
 
 func GetMunAndProv(id int64, store database.Store, ctx context.Context) (database.Municipio, database.Provincium, error) {
@@ -15,4 +16,8 @@ func GetMunAndProv(id int64, store database.Store, ctx context.Context) (databas
 		return database.Municipio{}, database.Provincium{}, err
 	}
 	return mun, prov, nil
+}
+
+func ErrorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
 }

@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"Tesis/internal/server/common_data"
 	"Tesis/internal/token"
 	"Tesis/pkg/util"
 	"database/sql"
@@ -35,59 +36,59 @@ func (server *Server) RefreshAccesToken(ctx *gin.Context) {
 	var req RefreshAccessTokenRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, common_data.ErrorResponse(err))
 		return
 	}
 
 	config, err := util.LoadConfig("..")
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 	}
 	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetrickey)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 	}
 
 	refreshPayload, err := token.Maker.VerifyToken(tokenMaker, req.RefreshToken)
 
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, common_data.ErrorResponse(err))
 		return
 	}
-	session, err := server.store.GetSessions(ctx, refreshPayload.ID)
+	session, err := server.GetStore().GetSessions(ctx, refreshPayload.ID)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			ctx.JSON(http.StatusNotFound, common_data.ErrorResponse(err))
 			return
 		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusInternalServerError, common_data.ErrorResponse(err))
 		return
 
 	}
 	if session.IsBlocked {
 		err := fmt.Errorf("blocked session")
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, common_data.ErrorResponse(err))
 		return
 	}
 
 	if session.RefreshToken != req.RefreshToken {
 		err := fmt.Errorf("missmatch session token ")
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, common_data.ErrorResponse(err))
 		return
 	}
 
 	if time.Now().After(session.ExpiresAt) {
 		err := fmt.Errorf("expired session")
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		ctx.JSON(http.StatusUnauthorized, common_data.ErrorResponse(err))
 	}
 
-	accessToken, accessPayload, err := server.TokenMaker.CreateToken(
+	accessToken, accessPayload, err := server.GetTokenMaker().CreateToken(
 		refreshPayload.Username,
-		server.config.AccessTokenDuration)
+		server.GetConfig().AccessTokenDuration)
 	if err != nil {
-		ctx.JSON(http.StatusAlreadyReported, errorResponse(err))
+		ctx.JSON(http.StatusAlreadyReported, common_data.ErrorResponse(err))
 		return
 	}
 

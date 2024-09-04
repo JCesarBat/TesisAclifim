@@ -3,6 +3,7 @@ package router
 import (
 	"Tesis/internal/server/Municipio"
 	"Tesis/internal/server/Prov"
+	"Tesis/internal/server/asociado"
 	"Tesis/internal/server/auth"
 	"Tesis/internal/server/users"
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ import (
 var r *gin.Engine
 
 func InitRouter(authServer *auth.Server, userServer *users.Server,
-	provServer *Prov.Server, munServrer *Municipio.Server) {
+	provServer *Prov.Server, munServrer *Municipio.Server, asServer *asociado.Server) {
 	r = gin.Default()
 
 	// Provincias y Municipios
@@ -36,7 +37,12 @@ func InitRouter(authServer *auth.Server, userServer *users.Server,
 	authRouts.PUT("/user/password", userServer.UpdatePassword)
 	authRouts.PUT("/user/upgrade", userServer.UpgradeToSuperUser)
 	authRouts.DELETE("/user/:id", userServer.DeleteUser)
-
+	// asociado
+	r.GET("/asociado/:id", asServer.GetAsociado)
+	r.GET("/asociados", asServer.ListAsociados)
+	r.POST("/asociado", asServer.CreateAsociado)
+	r.PUT("/asociado", asServer.UpdateAsociado)
+	r.DELETE("/asociado/:id", asServer.DeleteAsociado)
 }
 
 func Run(addr string) error {

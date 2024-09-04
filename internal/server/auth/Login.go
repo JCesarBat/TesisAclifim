@@ -2,6 +2,7 @@ package auth
 
 import (
 	database "Tesis/database/sqlc"
+	"Tesis/internal/server/common_data"
 	"Tesis/pkg/util"
 	"database/sql"
 	"errors"
@@ -48,7 +49,7 @@ func (s *Server) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Errorf("the cannot be null %v", err)})
 		return
 	}
-	user, err := s.store.GetUser(c, req.Username)
+	user, err := s.GetStore().GetUser(c, req.Username)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Errorf("not found the user %v", err)})
@@ -62,7 +63,7 @@ func (s *Server) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "the password is invalid"})
 		return
 	}
-	mun, err := s.store.GetMunicipio(c, user.IDMunicipio)
+	mun, err := s.GetStore().GetMunicipio(c, user.IDMunicipio)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Errorf("error in the database the municipio dont exists %v", err)})
@@ -71,7 +72,7 @@ func (s *Server) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
-	prov, err := s.store.GetProvincia(c, mun.IDProvincia)
+	prov, err := s.GetStore().GetProvincia(c, mun.IDProvincia)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Errorf("error in the database the provincia dont exists %v", err)})
@@ -81,27 +82,27 @@ func (s *Server) Login(c *gin.Context) {
 		return
 	}
 
-	accessToken, accessPayload, err := s.TokenMaker.CreateToken(
+	accessToken, accessPayload, err := s.GetTokenMaker().CreateToken(
 		user.Username,
-		s.config.AccessTokenDuration,
+		s.GetConfig().AccessTokenDuration,
 	)
 
 	if err != nil {
-		c.JSON(http.StatusAlreadyReported, errorResponse(err))
+		c.JSON(http.StatusAlreadyReported, common_data.ErrorResponse(err))
 		return
 	}
 
-	refreshToken, refreshPayload, err := s.TokenMaker.CreateToken(
+	refreshToken, refreshPayload, err := s.GetTokenMaker().CreateToken(
 		user.Username,
-		s.config.Refresh_Token_Duration,
+		s.GetConfig().Refresh_Token_Duration,
 	)
 
 	if err != nil {
-		c.JSON(http.StatusAlreadyReported, errorResponse(err))
+		c.JSON(http.StatusAlreadyReported, common_data.ErrorResponse(err))
 		return
 	}
 
-	session, err := s.store.CreateUSessions(c, database.CreateUSessionsParams{
+	session, err := s.GetStore().CreateUSessions(c, database.CreateUSessionsParams{
 		ID:           refreshPayload.ID,
 		UserID:       user.ID,
 		RefreshToken: refreshToken,

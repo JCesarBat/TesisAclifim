@@ -4,6 +4,7 @@ import (
 	database "Tesis/database/sqlc"
 	"Tesis/internal/server/Municipio"
 	"Tesis/internal/server/Prov"
+	"Tesis/internal/server/asociado"
 	"Tesis/internal/server/auth"
 	"Tesis/internal/server/router"
 	"Tesis/internal/server/users"
@@ -45,7 +46,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to start the mun server")
 	}
-	router.InitRouter(authServer, userServer, provServer, munServer)
+	asServer, err := asociado.NewServer(store, config)
+	if err != nil {
+		log.Fatal("Failed to start the asociado server")
+	}
+	router.InitRouter(authServer, userServer, provServer, munServer, asServer)
 	log.Println("the server is running in the port:", config.HTTP_Server)
 	router.Run(config.HTTP_Server)
 }

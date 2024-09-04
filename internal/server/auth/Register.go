@@ -57,12 +57,12 @@ func (s *Server) Register(c *gin.Context) {
 		Email:       req.Email,
 		IDMunicipio: int64(req.Municipio),
 	}
-	user, err := s.store.InsertUser(c, params)
+	user, err := s.GetStore().InsertUser(c, params)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error "})
 		return
 	}
-	mun, err := s.store.GetMunicipio(c, int64(req.Municipio))
+	mun, err := s.GetStore().GetMunicipio(c, int64(req.Municipio))
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "the municipio selected is not in the database"})
@@ -71,7 +71,7 @@ func (s *Server) Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error "})
 		return
 	}
-	prov, err := s.store.GetProvincia(c, int64(req.Municipio))
+	prov, err := s.GetStore().GetProvincia(c, int64(req.Municipio))
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "the provincia selected is not in the database"})
