@@ -20,13 +20,13 @@ const (
 func AutMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		autorizationHeader := ctx.GetHeader(authorizationHeaderKey)
-
+		fields := strings.Fields(autorizationHeader)
 		if len(autorizationHeader) == 0 {
 			err := errors.New("authorization header is not provide")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, common_data.ErrorResponse(err))
 			return
 		}
-		fields := strings.Fields(autorizationHeader)
+
 		if len(fields) < 2 {
 			err := errors.New("Invalid authorization header format")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, common_data.ErrorResponse(err))

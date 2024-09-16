@@ -7,6 +7,7 @@ import (
 	"Tesis/internal/server/asociado"
 	"Tesis/internal/server/auth"
 	"Tesis/internal/server/common_data"
+	"Tesis/internal/server/datos_sociales"
 	"Tesis/internal/server/users"
 	"Tesis/pkg/util"
 )
@@ -17,6 +18,7 @@ type Orchestrator struct {
 	Auth     *auth.Server
 	User     *users.Server
 	Asociado *asociado.Server
+	DatosS   *datos_sociales.Server
 }
 
 func NewOrchestrator(store database.Store, config util.Config) (*Orchestrator, error) {
@@ -30,5 +32,6 @@ func NewOrchestrator(store database.Store, config util.Config) (*Orchestrator, e
 		Auth:     &auth.Server{server},
 		User:     &users.Server{server},
 		Asociado: &asociado.Server{server},
+		DatosS:   &datos_sociales.Server{server},
 	}, nil
 }

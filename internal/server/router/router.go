@@ -39,6 +39,12 @@ func InitRouter(orchestrator *orchestrator.Orchestrator) {
 	r.POST("/asociado", orchestrator.Asociado.CreateAsociado)
 	r.PUT("/asociado", orchestrator.Asociado.UpdateAsociado)
 	r.DELETE("/asociado/:id", orchestrator.Asociado.DeleteAsociado)
+
+	// Datos Sociales
+	r.GET("/datosSocial/:id", orchestrator.DatosS.GetDatosS)
+	r.POST("/datosSocial", orchestrator.DatosS.InsertDatosSociales)
+	r.PUT("/datosSocial", orchestrator.DatosS.UpdateD)
+	r.DELETE("/datosSocial", orchestrator.DatosS.DeleteDatosSociales)
 }
 
 func Run(addr string) error {

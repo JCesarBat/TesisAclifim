@@ -17,6 +17,7 @@ import (
 // @host localhost:8080
 // @BasePath
 func main() {
+
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("Failed to load config")
