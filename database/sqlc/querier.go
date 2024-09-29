@@ -6,20 +6,25 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
 
 type Querier interface {
+	CreateActividadDeportiva(ctx context.Context, arg CreateActividadDeportivaParams) (ActividadDeportiva, error)
+	CreateParticipacionD(ctx context.Context, arg CreateParticipacionDParams) (ParticipacionD, error)
 	CreateUSessions(ctx context.Context, arg CreateUSessionsParams) (Session, error)
 	DeleteAsociado(ctx context.Context, id int64) error
 	DeleteDatosSociales(ctx context.Context, idAsociado int64) error
 	DeleteUser(ctx context.Context, id int64) error
+	GetActividadDeportiva(ctx context.Context, id int64) (ActividadDeportiva, error)
 	GetAllMunicipio(ctx context.Context, idProvincia int64) ([]Municipio, error)
 	GetAllProv(ctx context.Context) (Provincium, error)
 	GetAsociado(ctx context.Context, id int64) (Asociado, error)
 	GetDatosSociales(ctx context.Context, idAsociado int64) (DatosSociale, error)
 	GetMunicipio(ctx context.Context, id int64) (Municipio, error)
+	GetParticipacionD(ctx context.Context, idActividadDeportiva sql.NullInt64) ([]ParticipacionD, error)
 	GetProvincia(ctx context.Context, id int64) (Provincium, error)
 	GetSessions(ctx context.Context, id uuid.UUID) (Session, error)
 	GetUser(ctx context.Context, username string) (User, error)
@@ -31,8 +36,10 @@ type Querier interface {
 	InsertUser(ctx context.Context, arg InsertUserParams) (User, error)
 	ListAsociado(ctx context.Context, arg ListAsociadoParams) ([]Asociado, error)
 	ListUsers(ctx context.Context, arg ListUsersParams) ([]User, error)
+	UpdateActividadDeportiva(ctx context.Context, arg UpdateActividadDeportivaParams) (ActividadDeportiva, error)
 	UpdateAsociado(ctx context.Context, arg UpdateAsociadoParams) (Asociado, error)
 	UpdateDatosSociales(ctx context.Context, arg UpdateDatosSocialesParams) (DatosSociale, error)
+	UpdateParticipacionD(ctx context.Context, arg UpdateParticipacionDParams) (ParticipacionD, error)
 	UpdateToSuperUser(ctx context.Context, arg UpdateToSuperUserParams) (User, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 }
