@@ -1,9 +1,9 @@
 package common_data
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/internal/token"
-	"Tesis/pkg/util"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/internal/token"
+	"TesisAclifim/pkg/util"
 	"fmt"
 )
 

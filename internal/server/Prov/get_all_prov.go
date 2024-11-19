@@ -1,7 +1,7 @@
 package Prov
 
 import (
-	"Tesis/internal/server/common_data"
+	"TesisAclifim/internal/server/common_data"
 	"github.com/gin-gonic/gin"
 )
 

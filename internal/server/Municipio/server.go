@@ -1,8 +1,8 @@
 package Municipio
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/internal/server/common_data"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/internal/server/common_data"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"

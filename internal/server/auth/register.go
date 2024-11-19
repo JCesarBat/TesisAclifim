@@ -1,8 +1,8 @@
 package auth
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/pkg/util"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/pkg/util"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"

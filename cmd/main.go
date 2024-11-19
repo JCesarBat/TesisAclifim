@@ -1,11 +1,10 @@
 package main
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/internal/server/orchestrator"
-	"Tesis/internal/server/router"
-	_ "Tesis/pkg/docs"
-	"Tesis/pkg/util"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/internal/server/orchestrator"
+	"TesisAclifim/internal/server/router"
+	"TesisAclifim/pkg/util"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"

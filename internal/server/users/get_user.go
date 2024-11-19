@@ -1,7 +1,7 @@
 package users
 
 import (
-	"Tesis/internal/server/common_data"
+	"TesisAclifim/internal/server/common_data"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"

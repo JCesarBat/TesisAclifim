@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"Tesis/internal/server/common_data"
-	"Tesis/internal/token"
+	"TesisAclifim/internal/server/common_data"
+	"TesisAclifim/internal/token"
 	"errors"
 	"net/http"
 	"strings"

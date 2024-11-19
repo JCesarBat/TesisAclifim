@@ -1,7 +1,7 @@
 -- name: GetProvincia :one
 SELECT * FROM "provincia" WHERE id =$1;
 
--- name: GetAllProv :one
+-- name: GetAllProv :many
 SELECT * FROM "provincia" ;
 
 

@@ -5,4 +5,4 @@ SELECT * FROM "municipio" WHERE id =$1;
 SELECT * FROM "municipio" WHERE id_provincia =$1;
 
 -- name: InsertMunicipio :one
-INSERT INTO "municipio"("name","id_provincia")values ($1,$2) RETURNING *;
+INSERT IN9TO "municipio"("name","id_provincia")values ($1,$2) RETURNING *;

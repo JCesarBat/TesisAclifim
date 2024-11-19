@@ -1,9 +1,9 @@
 package users
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/internal/server/common_data"
-	"Tesis/pkg/util"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/internal/server/common_data"
+	"TesisAclifim/pkg/util"
 	"database/sql"
 	"errors"
 	"github.com/gin-gonic/gin"

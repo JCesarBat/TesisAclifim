@@ -1,8 +1,6 @@
 package Prov
 
-import (
-	database "Tesis/database/sqlc"
-)
+import database "TesisAclifim/database/sqlc"
 
 type ProvInterface interface {
 	GetStore() database.Store

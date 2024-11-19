@@ -1,8 +1,8 @@
 package datos_sociales
 
 import (
-	database "Tesis/database/sqlc"
-	"Tesis/internal/server/common_data"
+	database "TesisAclifim/database/sqlc"
+	"TesisAclifim/internal/server/common_data"
 	"database/sql"
 	"github.com/gin-gonic/gin"
 	"net/http"

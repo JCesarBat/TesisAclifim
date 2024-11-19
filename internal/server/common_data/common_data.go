@@ -1,7 +1,7 @@
 package common_data
 
 import (
-	database "Tesis/database/sqlc"
+	database "TesisAclifim/database/sqlc"
 	"context"
 	"github.com/gin-gonic/gin"
 )

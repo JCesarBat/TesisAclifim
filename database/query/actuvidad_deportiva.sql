@@ -31,3 +31,9 @@ SET
     "lugar_alcanzado"=$5,
     "donde_se_desarrollo"=$6
 WHERE "id"=$1 and "id_actividad_deportiva"=$2  returning *;
+
+-- name: DeleteParticipacion :exec
+DELETE FROM "participacionD" WHERE id =$1;
+
+-- name: DeleteActividaDeportiva :exec
+DELETE FROM "actividad_deportiva" WHERE id =$1;

@@ -1,7 +1,7 @@
 package token
 
 import (
-	"Tesis/pkg/util"
+	"TesisAclifim/pkg/util"
 	"errors"
 	"github.com/google/uuid"
 	"math/rand"

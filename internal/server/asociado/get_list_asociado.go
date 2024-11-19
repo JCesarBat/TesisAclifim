@@ -1,7 +1,7 @@
 package asociado
 
 import (
-	database "Tesis/database/sqlc"
+	database "TesisAclifim/database/sqlc"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

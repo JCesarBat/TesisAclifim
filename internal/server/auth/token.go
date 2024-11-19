@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"Tesis/internal/server/common_data"
-	"Tesis/internal/token"
-	"Tesis/pkg/util"
+	"TesisAclifim/internal/server/common_data"
+	"TesisAclifim/internal/token"
+	"TesisAclifim/pkg/util"
 	"database/sql"
 	"fmt"
 	"net/http"
